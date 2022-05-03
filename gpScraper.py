@@ -47,6 +47,7 @@ for x in range(title_length):
 
 
 ##### Writing to file #####
+## For some reason, one of the code blocks has to be commented out or else it breaks
 
 headers = ['Date', 'Race', 'Location', 'Lights Out', 'Watch']
 data = [date,title,location,time,watch]
