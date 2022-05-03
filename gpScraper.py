@@ -23,6 +23,31 @@ for post in posts:
     time.append(post.find(class_="winnerLightsOut__col Table__TD").text.strip())
     watch.append(post.find(class_="tv__col Table__TD").text.strip())
 
+time_length = len(time)
+for x in range(time_length):
+    if (time[x].find('.')==1):
+        time[x] = time[x].replace(time[x], "Race Completed")
+    elif (time[x].find('Canceled')==0):
+        time[x] = time[x].replace(time[x], "Race has been CANCELED")
+
+watch_length = len(watch)
+for x in range(watch_length):
+    if not bool(watch[x]):
+        watch[x] = watch[x].replace(watch[x], "N/A")
+
+dates_length = len(date)
+for x in range(dates_length):
+    # print(date[x])
+    month = date[x].split(' ')
+    if (len(month) <= 4):
+        date[x] = month[0] + ' ' + month[-1]
+    else:
+        date[x] = month[-2] + ' ' + month[-1]
+
+title_length = len(title)
+for x in range(title_length):
+    title[x] = title[x].replace("GP", "Grand Prix")
+
 print("Dates:")
 print(date)
 print("------------------")
@@ -39,7 +64,4 @@ print("Where to watch:")
 print(watch)
 
 # TODO:
-#   check times for a . character and omit the value, replace with n/a.
-#   check watch for an empty set, replace with n/a.
-#   replace dates w/ first 3 & last 2 characters of the string?
 #   write results to CSV w/ headers.
