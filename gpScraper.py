@@ -1,5 +1,10 @@
 import requests
+import csv
+import xlsxwriter
 from bs4 import BeautifulSoup
+
+
+##### Scraping from Web #####
 
 page = requests.get("https://www.espn.com/f1/schedule")
 soup = BeautifulSoup(page.content, "html.parser")
@@ -36,33 +41,28 @@ for x in range(watch_length):
         watch[x] = watch[x].replace(watch[x], "No info available")
     watch[x] = watch[x].replace('Highlights', "N/A")
 
-# dates_length = len(date)
-# for x in range(dates_length):
-#     # print(date[x])
-#     month = date[x].split(' ')
-#     if (len(month) <= 4):
-#         date[x] = month[0] + ' ' + month[-1]
-#     else:
-#         date[x] = month[-2] + ' ' + month[-1]
-
 title_length = len(title)
 for x in range(title_length):
     title[x] = title[x].replace("GP", "Grand Prix")
 
-print("Weekend:")
-print(date)
-print("------------------")
-print("Title:")
-print(title)
-print("------------------")
-print("Locations:")
-print(location)
-print("------------------")
-print("Race Time:")
-print(time)
-print("------------------")
-print("Where to Watch:")
-print(watch)
 
-# TODO:
-#   write results to CSV w/ headers.
+##### Writing to file #####
+
+headers = ['Date', 'Race', 'Location', 'Lights Out', 'Watch']
+data = [date,title,location,time,watch]
+
+# writing to an xlsx file
+# with xlsxwriter.Workbook('files/schedule.xlsx') as workbook:
+#     worksheet = workbook.add_worksheet()
+#     for row_num, data in enumerate(data):
+#         # print (row_num, headers[row_num],i)
+#         worksheet.write_row(row_num, 0, [headers[row_num]])
+#         worksheet.write_row(row_num, 1, data)
+
+# writing to csv file 
+with open('files/schedule.csv', 'w') as csvfile: 
+    wr = csv.writer(csvfile) 
+    for row_num, data in enumerate(data):
+        wr.writerow([headers[row_num]])
+        wr.writerow(data)
+
