@@ -33,22 +33,23 @@ for x in range(time_length):
 watch_length = len(watch)
 for x in range(watch_length):
     if not bool(watch[x]):
-        watch[x] = watch[x].replace(watch[x], "N/A")
+        watch[x] = watch[x].replace(watch[x], "No info available")
+    watch[x] = watch[x].replace('Highlights', "N/A")
 
-dates_length = len(date)
-for x in range(dates_length):
-    # print(date[x])
-    month = date[x].split(' ')
-    if (len(month) <= 4):
-        date[x] = month[0] + ' ' + month[-1]
-    else:
-        date[x] = month[-2] + ' ' + month[-1]
+# dates_length = len(date)
+# for x in range(dates_length):
+#     # print(date[x])
+#     month = date[x].split(' ')
+#     if (len(month) <= 4):
+#         date[x] = month[0] + ' ' + month[-1]
+#     else:
+#         date[x] = month[-2] + ' ' + month[-1]
 
 title_length = len(title)
 for x in range(title_length):
     title[x] = title[x].replace("GP", "Grand Prix")
 
-print("Dates:")
+print("Weekend:")
 print(date)
 print("------------------")
 print("Title:")
@@ -57,10 +58,10 @@ print("------------------")
 print("Locations:")
 print(location)
 print("------------------")
-print("Times:")
+print("Race Time:")
 print(time)
 print("------------------")
-print("Where to watch:")
+print("Where to Watch:")
 print(watch)
 
 # TODO:
