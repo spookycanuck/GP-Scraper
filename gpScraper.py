@@ -11,59 +11,41 @@ soup = BeautifulSoup(page.content, "html.parser")
 home = soup.find(class_="Table__TBODY")
 posts = home.find_all(class_="Table__TR Table__TR--sm Table__even")
 
-date = []
-title = []
-location = []
-time = []
-watch = []
-x = []
+output_list = []
 
 for post in posts:
-    date.append(post.find(class_="date__col Table__TD").text.strip())
-    title.append(post.find("a", class_="AnchorLink").text.strip())
-    x.append(post.find(class_="race__col Table__TD"))
-    for each in x:
-        loc = (each.find("div").text.strip())
-    location.append(loc)
-    time.append(post.find(class_="winnerLightsOut__col Table__TD").text.strip())
-    watch.append(post.find(class_="tv__col Table__TD").text.strip())
+    date = post.find(class_="date__col Table__TD").text.strip()
+    title = post.find("a", class_="AnchorLink").text.strip()
+    location = post.find(class_="race__col Table__TD").find("div").text.strip()
+    time = post.find(class_="winnerLightsOut__col Table__TD").text.strip()
+    watch = post.find(class_="tv__col Table__TD").text.strip()
 
-time_length = len(time)
-for x in range(time_length):
-    if (time[x].find('.')==1):
-        time[x] = time[x].replace(time[x], "Race Completed")
-    elif (time[x].find('Canceled')==0):
-        time[x] = time[x].replace(time[x], "Race has been CANCELED")
+    if (time.find('.')==1):
+        time = time.replace(time, "Race Completed")
+        watch = watch.replace('Highlights', "N/A")
+    elif (time.find('Canceled')==0):
+        time = time.replace(time, "Race has been CANCELED")
+    
+    if not bool(watch):
+        watch = watch.replace(watch, "No info available")
 
-watch_length = len(watch)
-for x in range(watch_length):
-    if not bool(watch[x]):
-        watch[x] = watch[x].replace(watch[x], "No info available")
-    watch[x] = watch[x].replace('Highlights', "N/A")
+    race_dict = {
+        "date": date,
+        "race": title,
+        "location": location,
+        "time": time,
+        "watch": watch
+    }
 
-title_length = len(title)
-for x in range(title_length):
-    title[x] = title[x].replace("GP", "Grand Prix")
+    output_list.append(race_dict)
 
 
-##### Writing to file #####
-## For some reason, one of the code blocks has to be commented out or else it breaks
+##### Writing to CSV #####
 
-headers = ['Date', 'Race', 'Location', 'Lights Out', 'Watch']
-data = [date,title,location,time,watch]
+headers = ['date', 'race', 'location', 'time', 'watch']
 
-# writing to an xlsx file
-# with xlsxwriter.Workbook('files/schedule.xlsx') as workbook:
-#     worksheet = workbook.add_worksheet()
-#     for row_num, data in enumerate(data):
-#         # print (row_num, headers[row_num],i)
-#         worksheet.write_row(row_num, 0, [headers[row_num]])
-#         worksheet.write_row(row_num, 1, data)
-
-# writing to csv file 
-with open('files/schedule.csv', 'w') as csvfile: 
-    wr = csv.writer(csvfile) 
-    for row_num, data in enumerate(data):
-        wr.writerow([headers[row_num]])
-        wr.writerow(data)
-
+# writing to file 
+with open('files/schedule4.csv', 'w') as csvfile: 
+    wr = csv.DictWriter(csvfile, fieldnames=headers) 
+    wr.writeheader()
+    wr.writerows(output_list)
