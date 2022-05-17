@@ -15,11 +15,11 @@ output_list = []
 
 for post in posts:
     date = post.find(class_="date__col Table__TD").text.strip()
-    title = post.find("a", class_="AnchorLink").text.strip()
+    title = post.find("a", class_="AnchorLink").text.strip().replace("GP", "Grand Prix")
     location = post.find(class_="race__col Table__TD").find("div").text.strip()
     time = post.find(class_="winnerLightsOut__col Table__TD").text.strip()
     watch = post.find(class_="tv__col Table__TD").text.strip()
-
+    
     if (time.find('.')==1):
         time = time.replace(time, "Race Completed")
         watch = watch.replace('Highlights', "N/A")
